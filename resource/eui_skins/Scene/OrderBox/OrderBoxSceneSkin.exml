@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="OrderBoxSceneSkin" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:List id="listMain" x="0" y="0" itemRendererSkinName="OrderBoxItemSkin">
+		<e:ArrayCollection>
+			<e:Array>
+				<e:Object null="null"/>
+				<e:Object null="null"/>
+				<e:Object null="null"/>
+				<e:Object null="null"/>
+				<e:Object null="null"/>
+				<e:Object null="null"/>
+				<e:Object null="null"/>
+				<e:Object null="null"/>
+				<e:Object null="null"/>
+			</e:Array>
+		</e:ArrayCollection>
+		<e:layout>
+			<e:TileLayout requestedRowCount="3" requestedColumnCount="5"/>
+		</e:layout>
+	</e:List>
+</e:Skin>
