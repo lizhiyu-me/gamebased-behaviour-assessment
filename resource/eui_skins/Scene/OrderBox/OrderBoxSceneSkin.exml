@@ -18,4 +18,9 @@
 			<e:TileLayout requestedRowCount="3" requestedColumnCount="5"/>
 		</e:layout>
 	</e:List>
+	<e:Label id="txtWrong" text="try again" horizontalCenter="0" verticalCenter="0" size="113" textColor="0xed0b0b" visible="false"/>
+	<e:Label id="txtCorrect" text="Yes" horizontalCenter="0" verticalCenter="0" size="113" textColor="0x8afc02" visible="false"/>
+	<e:Label id="txtComplete" text="Win" horizontalCenter="0" verticalCenter="0" size="113" textColor="0xf2d60c" visible="false"/>
+	<e:Button id="btnStart" label="START" horizontalCenter="0" verticalCenter="0" scaleX="2" scaleY="2" visible="false"/>
+	<e:Button id="btnAgain" label="RESUME" horizontalCenter="0" verticalCenter="229" scaleX="2" scaleY="2" visible="false"/>
 </e:Skin>

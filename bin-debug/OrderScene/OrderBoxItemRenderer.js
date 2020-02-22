@@ -16,7 +16,16 @@ var OrderBoxItemRenderer = (function (_super) {
     OrderBoxItemRenderer.prototype.dataChanged = function () {
         _super.prototype.dataChanged.call(this);
         this.mData = this.data;
-        this.setViewStatus(this.mData.stat);
+        if (this.mData.stat === EnumOrderBoxStatus.CORRECT) {
+            setTimeout(function (that) {
+                that.txtGreen.visible = true;
+                egret.Tween.get(that.txtGreen).to({ scaleX: 1.2, scaleY: 1.2 }, 800)
+                    .to({ scaleX: 1, scaleY: 1, alpha: 0 }, 800).call(function () {
+                    that.txtGreen.alpha = 1;
+                    that.txtGreen.visible = false;
+                });
+            }, this.mData.showIdx * 1600, this);
+        }
     };
     OrderBoxItemRenderer.prototype.setViewStatus = function (sta) {
         this.txtGreen.visible = sta === EnumOrderBoxStatus.CORRECT;
