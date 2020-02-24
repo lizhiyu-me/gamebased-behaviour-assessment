@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin class="OrderBoxItemSkin" width="260" height="250" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
 	<e:Rect id="imgBg" width="100%" height="100%" x="0" y="0" fillColor="0xb5b3b3" strokeWeight="9" strokeColor="0x726e6e"/>
-	<e:Label id="txtGreen" text="✅" anchorOffsetX="0" anchorOffsetY="0" size="122" horizontalCenter="0" verticalCenter="0" visible="false"/>
-	<e:Label id="txtRed" text="❌" anchorOffsetX="0" anchorOffsetY="0" size="122" horizontalCenter="0" verticalCenter="0" visible="false"/>
+	<e:Label id="txtGreen" text="YES" anchorOffsetX="0" anchorOffsetY="0" size="122" horizontalCenter="0" verticalCenter="0" textColor="0x3bb709" visible="false"/>
+	<e:Label id="txtRed" text="NO" anchorOffsetX="0" anchorOffsetY="0" size="122" horizontalCenter="0" verticalCenter="0" textColor="0xfc0f0f" visible="false"/>
 </e:Skin>
