@@ -30,8 +30,8 @@ class Main extends eui.UILayer {
 
     private async runGame() {
         await this.loadResource()
-        let _scene = new OrderBoxScene();
-        this.addChild(_scene);
+        AppFacade.getInstance(this);
+        AppFacade.getInstance().sendCommand(CMD_StartUp.NAME);
         // this.createGameScene();
         // const result = await RES.getResAsync("description_json")
         // this.startAnimation(result);

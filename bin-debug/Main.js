@@ -70,14 +70,13 @@ var Main = (function (_super) {
     };
     Main.prototype.runGame = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _scene;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.loadResource()];
                     case 1:
                         _a.sent();
-                        _scene = new OrderBoxScene();
-                        this.addChild(_scene);
+                        AppFacade.getInstance(this);
+                        AppFacade.getInstance().sendCommand(CMD_StartUp.NAME);
                         return [2 /*return*/];
                 }
             });
