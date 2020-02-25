@@ -24,7 +24,6 @@ class OrderBoxMediator implements IMediator {
     }
     private mListMainDataProvider: eui.ArrayCollection;
     private initView() {
-        this.recoverView();
         this.mListMainDataProvider = new eui.ArrayCollection();
         this.view.listMain.itemRendererSkinName = 'OrderBoxItemSkin';
         this.view.listMain.itemRenderer = OrderBoxItemRenderer;
@@ -33,10 +32,16 @@ class OrderBoxMediator implements IMediator {
         this.view.listMain.addEventListener(eui.ItemTapEvent.ITEM_TAP, this.onListItemTap, this);
         this.view.btnStart.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onStart, this);
         this.view.btnAgain.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onAgain, this);
+        this.view.btnAgainInGame.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onAgain, this);
+        this.view.groupMask.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onMask, this);
+        this.recoverView();
     }
     private onStart() {
         this.view.btnStart.visible = false;
-        this.refreshDataAndShowAni();
+        this.view.txtInstruct.visible = false;
+        this.view.groupMask.visible = true;
+        this.itemAni();
+        // this.refreshDataAndShowAni();
     }
     private onAgain() {
         this.recoverView();
@@ -49,7 +54,11 @@ class OrderBoxMediator implements IMediator {
     }
     private itemAni() {
         let _el: OrderBoxItemRenderer = this.mItems2Show.shift();
-        if (!_el) return;
+        if (!_el) {
+            this.view.groupMask.visible = false;
+            this.showFloatBegin();
+            return;
+        }
         egret.Tween.get(_el.txtGreen).to({ visible: true, scaleX: 1.2, scaleY: 1.2 }, 800)
             .to({ scaleX: 1, scaleY: 1, alpha: 0 }, 800).call(
             () => {
@@ -62,23 +71,35 @@ class OrderBoxMediator implements IMediator {
     }
     private mItems2Show: OrderBoxItemRenderer[] = [];
     private rendererCount: number = 0;
+    private mItemHashDic = {};
     public collectItem2Show(data) {
-        if (data.stat === EnumOrderBoxStatus.CORRECT) this.mItems2Show.push(data.item);
+        //TODO 未知原因渲染两次
+        if (data.stat === EnumOrderBoxStatus.CORRECT) {
+            if(!this.mItemHashDic[data.item.hashCode]){
+                this.mItems2Show.push(data.item);
+                this.mItemHashDic[data.item.hashCode] = true;
+            }
+        }
         this.rendererCount++;
         if (this.rendererCount === this.mItemLen) {
-            this.mItems2Show.sort((a,b)=>{
+            this.view.btnStart.visible = true;
+            this.mItems2Show.sort((a, b) => {
                 return a['mData']["showIdx"] - b['mData']['showIdx']
             })
-            this.itemAni();
         }
     }
     /**还原场景组件状态及数据 */
     private recoverView() {
-        this.view.btnStart.visible = true;
+        // this.view.btnStart.visible = true;
+        this.view.txtInstruct.visible = true;
+        this.view.btnAgainInGame.visible = false;
         this.view.btnAgain.visible = false;
         this.mClickStep = 0;
         this.mItems2Show.length = 0;
         this.rendererCount = 0;
+        this.mItemHashDic = {};
+        this.errorTime = 0;
+        this.refreshDataAndShowAni();
     }
     private mClickStep: number = 0;
     private onListItemTap(e: eui.ItemTapEvent) {
@@ -94,10 +115,12 @@ class OrderBoxMediator implements IMediator {
             this.mClickStep++;
         }
     }
+    private errorTime:number = 0;
     private showFloat(type: EnumOrderBoxStatus) {
         if (type === EnumOrderBoxStatus.CORRECT) {
             this.showFloatCorrect();
         } else {
+            if(++this.errorTime > 6) this.view.btnAgainInGame.visible = true;
             this.showFloatError();
         }
     }
@@ -109,6 +132,14 @@ class OrderBoxMediator implements IMediator {
             }
         )
     }
+    private showFloatError() {
+        egret.Tween.get(this.view.txtWrong).to({ visible: true }).to({ alpha: 0 }, 500).call(
+            () => {
+                this.view.txtWrong.visible = false;
+                this.view.txtWrong.alpha = 1;
+            }
+        )
+    }
     private showFloatWin() {
         egret.Tween.get(this.view.txtComplete).to({ visible: true }).to({ scaleX: 1.6, scaleY: 1.6 }, 500).call(
             () => {
@@ -117,13 +148,12 @@ class OrderBoxMediator implements IMediator {
             }
         );
     }
-    private showFloatError() {
-        egret.Tween.get(this.view.txtWrong).to({ visible: true }).to({ alpha: 0 }, 500).call(
+    private showFloatBegin() {
+        egret.Tween.get(this.view.txtWarning).to({ visible: true }).to({ scaleX: 1.6, scaleY: 1.6 }, 800).call(
             () => {
-                this.view.txtWrong.visible = false;
-                this.view.txtWrong.alpha = 1;
+                this.view.txtWarning.visible = false;
             }
-        )
+        );
     }
     private mToalStepCount: number = 0;
     private mStepData: { [step: number]: number } = {};
@@ -157,6 +187,9 @@ class OrderBoxMediator implements IMediator {
             }
         })
         return _res;
+    }
+    public onMask() {
+
     }
     onRegister() {
         if (this.view.hasUICompleteCache) this.onViewUIComplete();

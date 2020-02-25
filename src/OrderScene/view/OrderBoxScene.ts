@@ -6,6 +6,13 @@ class OrderBoxScene extends BaseView {
 
     public btnStart: eui.Button;
     public btnAgain: eui.Button;
+    public btnAgainInGame: eui.Button;
+    public txtInstruct: eui.Label;
+    public groupMask:eui.Group;
+    public txtWarning:eui.Label;
+
+
+
 
 
     constructor() {

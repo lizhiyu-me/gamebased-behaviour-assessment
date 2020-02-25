@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin class="OrderBoxSceneSkin" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
-	<e:List id="listMain" x="0" y="0" itemRendererSkinName="OrderBoxItemSkin">
-		<e:ArrayCollection>
+	<e:Button id="btnAgainInGame" label="重新来" scaleX="2" scaleY="2" left="0" top="0" visible="false"/>
+	<e:Group x="205" y="39">
+		<e:List id="listMain" itemRendererSkinName="OrderBoxItemSkin" x="0" y="0">
+			<e:ArrayCollection>
 			<e:Array>
 				<e:Object null="null"/>
 				<e:Object null="null"/>
@@ -12,15 +14,25 @@
 				<e:Object null="null"/>
 				<e:Object null="null"/>
 				<e:Object null="null"/>
+				<e:Object null="null"/>
+				<e:Object null="null"/>
+				<e:Object null="null"/>
+				<e:Object null="null"/>
+				<e:Object null="null"/>
+				<e:Object null="null"/>
 			</e:Array>
-		</e:ArrayCollection>
-		<e:layout>
+			</e:ArrayCollection>
+			<e:layout>
 			<e:TileLayout requestedRowCount="3" requestedColumnCount="5"/>
-		</e:layout>
-	</e:List>
-	<e:Label id="txtWrong" text="try again" horizontalCenter="0" verticalCenter="0" size="113" textColor="0xed0b0b" visible="false"/>
-	<e:Label id="txtCorrect" text="Yes" horizontalCenter="0" verticalCenter="0" size="113" textColor="0x8afc02" visible="false"/>
-	<e:Label id="txtComplete" text="Win" horizontalCenter="0" verticalCenter="0" size="113" textColor="0xf2d60c" visible="false"/>
-	<e:Button id="btnStart" label="START" horizontalCenter="0" verticalCenter="0" scaleX="2" scaleY="2" visible="false"/>
-	<e:Button id="btnAgain" label="RESUME" horizontalCenter="0" verticalCenter="229" scaleX="2" scaleY="2" visible="false"/>
+			</e:layout>
+		</e:List>
+		<e:Label id="txtWrong" text="try again" size="113" textColor="0xed0b0b" y="280" horizontalCenter="0" height="130" visible="false"/>
+		<e:Label id="txtWarning" text="开始吧，朋友" size="113" y="280" horizontalCenter="0" textColor="0x8afc02" visible="false"/>
+		<e:Label id="txtCorrect" text="Yes" size="113" y="280" horizontalCenter="0" textColor="0x8afc02" visible="false"/>
+		<e:Label id="txtComplete" text="Win" size="113" textColor="0xf2d60c" y="280" horizontalCenter="0" visible="false"/>
+		<e:Button id="btnStart" label="START" scaleX="2" scaleY="2" y="286" horizontalCenter="0" visible="false"/>
+		<e:Button id="btnAgain" label="RESUME" scaleX="2" scaleY="2" y="515" horizontalCenter="0" visible="false"/>
+		<e:Label id="txtInstruct" text="点击START开始，动画播放完毕后，按照播放顺序点击方块即可过关" textColor="0xe85912" size="36" bold="true" width="595" y="138" horizontalCenter="0" visible="false"/>
+	</e:Group>
+	<e:Group id="groupMask" width="100%" height="100%" horizontalCenter="0" verticalCenter="0" touchThrough="false" touchEnabled="true" touchChildren="false" visible="false"/>
 </e:Skin>
