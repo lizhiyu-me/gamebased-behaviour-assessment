@@ -116,7 +116,13 @@ var Main = (function (_super) {
         return new Promise(function (resolve, reject) {
             // load skin theme configuration file, you can manually modify the file. And replace the default skin.
             //加载皮肤主题配置文件,可以手动修改这个文件。替换默认皮肤。
-            var theme = new eui.Theme("resource/default.thm.json", _this.stage);
+            var theme;
+            if (false) {
+                theme = new eui.Theme(null, _this.stage);
+            }
+            else {
+                theme = new eui.Theme("resource/default.thm.json", _this.stage);
+            }
             theme.addEventListener(eui.UIEvent.COMPLETE, function () {
                 resolve();
             }, _this);
