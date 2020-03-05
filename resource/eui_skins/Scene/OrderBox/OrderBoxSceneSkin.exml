@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin class="OrderBoxSceneSkin" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Rect width="100%" height="100%" horizontalCenter="0" verticalCenter="0" strokeColor="0xf9fbfc" fillColor="0x58b9e8"/>
 	<e:Button id="btnAgainInGame" label="重新来" scaleX="2" scaleY="2" left="0" top="0" visible="false"/>
 	<e:Group x="205" y="39">
 		<e:List id="listMain" itemRendererSkinName="OrderBoxItemSkin" x="0" y="0">

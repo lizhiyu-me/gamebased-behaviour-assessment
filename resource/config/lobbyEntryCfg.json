@@ -1,0 +1,16 @@
+[
+    {
+        "name":"瞬时记忆",
+        "subName":"(发传单)",
+        "bgColor":"0xE58852",
+        "kindID":801,
+        "bgImg":""
+    },
+    {
+        "name":"反应能力",
+        "subName":"(解锁)",
+        "bgColor":"0x138260",
+        "kindID":802,
+        "bgImg":""
+    }
+]

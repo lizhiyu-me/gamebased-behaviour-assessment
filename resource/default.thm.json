@@ -24,6 +24,8 @@
 		"resource/eui_skins/PanelSkin.exml",
 		"resource/eui_skins/ProgressBarSkin.exml",
 		"resource/eui_skins/RadioButtonSkin.exml",
+		"resource/eui_skins/Scene/Lobby/component/LobbyEntryItemSkin.exml",
+		"resource/eui_skins/Scene/Lobby/LobbySelectSceneSkin.exml",
 		"resource/eui_skins/Scene/OrderBox/component/OrderBoxItemSkin.exml",
 		"resource/eui_skins/Scene/OrderBox/OrderBoxSceneSkin.exml",
 		"resource/eui_skins/ScrollerSkin.exml",

@@ -30,6 +30,10 @@ declare module skins{
 	class RadioButtonSkin extends eui.Skin{
 	}
 }
+declare class LobbyEntryItemSkin extends eui.Skin{
+}
+declare class LobbySelectSceneSkin extends eui.Skin{
+}
 declare class OrderBoxItemSkin extends eui.Skin{
 }
 declare class OrderBoxSceneSkin extends eui.Skin{
