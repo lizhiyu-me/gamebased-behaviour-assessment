@@ -38,6 +38,10 @@ declare class OrderBoxItemSkin extends eui.Skin{
 }
 declare class OrderBoxSceneSkin extends eui.Skin{
 }
+declare class ReactionNumSkin extends eui.Skin{
+}
+declare class ReactioonRateSceneSkin extends eui.Skin{
+}
 declare module skins{
 	class ScrollerSkin extends eui.Skin{
 	}

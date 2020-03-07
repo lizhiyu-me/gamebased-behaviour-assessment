@@ -35,6 +35,8 @@ class LobbySelectMediator implements IMediator {
         //TODO 界面管理类，打开对应kindID的界面
         if (_data.kindID == EGameKindID.INSTANT_MEMORY) {
            AppFacade.getInstance().registerMediator(OrderBoxMediator,OrderBoxScene);
+        }else if(_data.kindID == EGameKindID.REACT_RATE){
+           AppFacade.getInstance().registerMediator(ReactionRateMediator,ReactionRateScene);
         }
     }
 
