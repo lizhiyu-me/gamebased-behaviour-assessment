@@ -23,8 +23,7 @@ class ReactionRateMediator implements IMediator {
     }
     private mCenterNumberDataProvider = new eui.ArrayCollection();
     private initView() {
-        this.view.btnPause.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onPause, this);
-        this.view.btnStart.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onStart, this);
+        this.view.btnSwitch.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onSwitch, this);
         this.view.btnRestart.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onAgain, this);
         this.refreshCenterNumber();
         this.initRotateTimer();
@@ -39,13 +38,23 @@ class ReactionRateMediator implements IMediator {
         for (let i = 0; i < _len; i++) {
             let _item: { num: number, color: number };
             _item = {
-                num: Math.floor(Math.random() * 10),
+                num: this.getRandomNum(_res),
                 color: 0xff0000
             }
             _res.push(_item);
         }
-        this.mCenterNumberDataProvider.source = _res;
         this.mCenterNumData = _res.map((i) => { return i.num });
+        this.mCenterNumData[0] = 0;
+        _res[0].num = 0;
+        this.mCenterNumberDataProvider.source = _res;
+    }
+    private getRandomNum(arr) {
+        let _random = Math.floor(Math.random() * 10);
+        if (arr[arr.length - 1] === _random) {
+            return this.getRandomNum(arr);
+        } else {
+            return _random;
+        };
     }
     private mPointerArc: number;
     private getPointerArc(baseArc: number) {
@@ -174,7 +183,7 @@ class ReactionRateMediator implements IMediator {
         return _itemContainer;
     }
     private mRotateSwitch: boolean = false;
-    private mRotateTimerDur: number = 17;
+    private mRotateTimerDur: number = 100;
     private mRotateTimer: egret.Timer = new egret.Timer(this.mRotateTimerDur);
     private initRotateTimer() {
         this.mRotateTimer.addEventListener(egret.TimerEvent.TIMER, this.onRotateTimer, this);
@@ -209,9 +218,12 @@ class ReactionRateMediator implements IMediator {
         let _curNum: number = this.getCurTarIdx();
         let _constAngle: number = this.mSectionCenterAngleDic[_curNum];
         let _isCorrect: boolean = (() => {
+            egret.log("[ReactionRateMediator:checkIsInCorrectPos] this.mPointerRotateAngle->", this.mPointerRotateAngle)
             //TODO: storage critical value in dic to avoid frequently claculate
-            let _boo1: boolean = this.mPointerRotateAngle + this.mPointerArc / 2 * this.mBaseData.arc2angleUnit >= _constAngle + this.mInitialParamOfSection.sectionArc / 2 * this.mBaseData.arc2angleUnit;
-            let _boo2: boolean = this.mPointerRotateAngle - this.mPointerArc / 2 * this.mBaseData.arc2angleUnit <= _constAngle - this.mInitialParamOfSection.sectionArc / 2 * this.mBaseData.arc2angleUnit;
+            let _distance: number = ((this.mPointerRotateAngle + this.mPointerArc / 2 * this.mBaseData.arc2angleUnit)%360) - (_constAngle + this.mInitialParamOfSection.sectionArc / 2 * this.mBaseData.arc2angleUnit);
+            let _boo1: boolean = _distance >= 0;
+            let _maxDistance: number = (this.mPointerArc - this.mInitialParamOfSection.sectionArc) * this.mBaseData.arc2angleUnit;
+            let _boo2: boolean = _distance <= _maxDistance;
             return _boo1 && _boo2;
         })();
         return _isCorrect;
@@ -227,6 +239,11 @@ class ReactionRateMediator implements IMediator {
     private onAgain() {
         this.recoverView();
     }
+    private onSwitch() {
+        let _status: number = this.view.onSwitch();
+        if (_status === 0) this.onPause();
+        else if (_status === 1) this.onStart();
+    }
     private setPointerToNewPos() {
         this.mPointer.container.rotation = Math.floor(Math.random() * 360);
     }
@@ -235,7 +252,7 @@ class ReactionRateMediator implements IMediator {
         if (_curNum == null) {
             this.mMarkArcObj.visible = false;
             return;
-        }else{
+        } else {
             this.mMarkArcObj.visible = true;
         }
         let _constAngle: number = this.mSectionCenterAngleDic[_curNum];
@@ -253,6 +270,7 @@ class ReactionRateMediator implements IMediator {
         this.view.setLabelStatus(false);
         this.setPointerToNewPos();
         this.setMarkArcObjPos();
+        this.view.resumeSwitchBtn();
     }
     onRegister() {
         if (this.view.hasUICompleteCache) this.onViewUIComplete();

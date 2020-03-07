@@ -20,7 +20,8 @@
 		</e:List>
 		<e:Label id="labelLockStatus" text="lock" horizontalCenter="0" verticalCenter="67" bold="true" textColor="0xf90707"/>
 	</e:Group>
-	<e:Button id="btnPause" label="pause" x="78" y="542"/>
-	<e:Button id="btnRestart" label="Restart" x="78" y="440"/>
-	<e:Button id="btnStart" label="start" x="78" y="639"/>
+	<e:Group x="78" verticalCenter="0">
+		<e:Button id="btnRestart" label="重来" x="0" y="0" width="200" height="100"/>
+		<e:Button id="btnSwitch" label="start" x="0" y="199" width="200" height="100"/>
+	</e:Group>
 </e:Skin>
