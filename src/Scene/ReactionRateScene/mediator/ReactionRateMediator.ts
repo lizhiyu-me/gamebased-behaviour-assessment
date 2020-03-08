@@ -31,25 +31,26 @@ class ReactionRateMediator implements IMediator {
         this.view.listSecret.dataProvider = this.mCenterNumberDataProvider;
 
     }
-    private mCenterNumData: number[];
+    private mCenterNumData: number[] = [];
     private refreshCenterNumber() {
+        this.mCenterNumData.length = 0;
         let _res = [];
         let _len = 5;
         for (let i = 0; i < _len; i++) {
             let _item: { num: number, color: number };
             _item = {
-                num: this.getRandomNum(_res),
+                num: this.getRandomNum(this.mCenterNumData),
                 color: 0xff0000
             }
+            this.mCenterNumData.push(_item.num);
+            // this.mCenterNumData.push(9);
             _res.push(_item);
         }
-        this.mCenterNumData = _res.map((i) => { return i.num });
-        this.mCenterNumData[0] = 0;
-        _res[0].num = 0;
         this.mCenterNumberDataProvider.source = _res;
     }
     private getRandomNum(arr) {
         let _random = Math.floor(Math.random() * 10);
+        // let _random = 9;
         if (arr[arr.length - 1] === _random) {
             return this.getRandomNum(arr);
         } else {
@@ -72,7 +73,7 @@ class ReactionRateMediator implements IMediator {
             angle2ArcUnit: this.mInitialParamOfSection.angle2ArcUnit,
             sectionArc: this.getPointerArc(this.mInitialParamOfSection.sectionArc)
         }
-            , 0x80E5BA);
+            , 0xEFC562);
         _secContainer.addChild(_pointer);
         this.mPointer.arc = this.mInitialParamOfSection.sectionArc;
         this.mPointer.container = _secContainer;
@@ -159,7 +160,7 @@ class ReactionRateMediator implements IMediator {
         // this.onStart();
     }
     private mInitialParamOfSection: { sectionWidth, radius, angle2ArcUnit, sectionArc };
-    private generateSectionArc(param: { sectionWidth, radius, angle2ArcUnit, sectionArc }, color: number = 0x0000ff): egret.Shape {
+    private generateSectionArc(param: { sectionWidth, radius, angle2ArcUnit, sectionArc }, color: number = 0x513B06): egret.Shape {
         if (!param) return;
         let _part: egret.Shape = new egret.Shape();
         let _partGrap: egret.Graphics = _part.graphics;
@@ -183,7 +184,7 @@ class ReactionRateMediator implements IMediator {
         return _itemContainer;
     }
     private mRotateSwitch: boolean = false;
-    private mRotateTimerDur: number = 100;
+    private mRotateTimerDur: number = 17;
     private mRotateTimer: egret.Timer = new egret.Timer(this.mRotateTimerDur);
     private initRotateTimer() {
         this.mRotateTimer.addEventListener(egret.TimerEvent.TIMER, this.onRotateTimer, this);
@@ -218,13 +219,17 @@ class ReactionRateMediator implements IMediator {
         let _curNum: number = this.getCurTarIdx();
         let _constAngle: number = this.mSectionCenterAngleDic[_curNum];
         let _isCorrect: boolean = (() => {
-            egret.log("[ReactionRateMediator:checkIsInCorrectPos] this.mPointerRotateAngle->", this.mPointerRotateAngle)
+            // egret.log("[ReactionRateMediator:checkIsInCorrectPos] this.mPointerRotateAngle->", this.mPointerRotateAngle)
             //TODO: storage critical value in dic to avoid frequently claculate
-            let _distance: number = ((this.mPointerRotateAngle + this.mPointerArc / 2 * this.mBaseData.arc2angleUnit)%360) - (_constAngle + this.mInitialParamOfSection.sectionArc / 2 * this.mBaseData.arc2angleUnit);
-            let _boo1: boolean = _distance >= 0;
-            let _maxDistance: number = (this.mPointerArc - this.mInitialParamOfSection.sectionArc) * this.mBaseData.arc2angleUnit;
-            let _boo2: boolean = _distance <= _maxDistance;
-            return _boo1 && _boo2;
+            let _centerDistance;
+            let _absDistance;
+            if (_constAngle === 0 && this.mPointerRotateAngle) {
+                var _temp = 360 - this.mPointerRotateAngle;
+                this.mPointerRotateAngle = Math.min(_temp,this.mPointerRotateAngle);
+            }
+            _centerDistance = this.mPointerRotateAngle - _constAngle;
+            _absDistance = Math.abs(_centerDistance);
+            return _absDistance <= (this.mPointerArc - this.mInitialParamOfSection.sectionArc)/2 * this.mBaseData.arc2angleUnit;
         })();
         return _isCorrect;
     }

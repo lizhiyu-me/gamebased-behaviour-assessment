@@ -1,6 +1,8 @@
 class BaseView extends eui.Component {
-    constructor() {
+    public isCanCloseByTopBanner:boolean = false;
+    constructor(isCanCloseByTopBanner:boolean = false) {
         super();
+        this.isCanCloseByTopBanner = isCanCloseByTopBanner;
         this.addEventListener(eui.UIEvent.COMPLETE, this.onUIComplete, this);
     }
     //TODO

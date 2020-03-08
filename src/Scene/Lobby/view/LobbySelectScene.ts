@@ -4,5 +4,6 @@ class LobbySelectScene extends BaseView {
         public listEntry:eui.List;
         constructor() {
             super();
+            this.listEntry.itemRenderer = LobbyEntryItemView;
         }
     }

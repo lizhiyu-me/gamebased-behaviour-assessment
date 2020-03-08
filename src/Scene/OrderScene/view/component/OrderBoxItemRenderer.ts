@@ -10,19 +10,16 @@ class OrderBoxItemRenderer extends eui.ItemRenderer {
 	protected dataChanged() {
 		super.dataChanged();
 		this.mData = this.data;
-		// if (this.mData.stat === EnumOrderBoxStatus.CORRECT) {
-			AppFacade.getInstance().sendNotification(OrderBoxMediator.collectItem2Show,{item:this,stat:this.mData.stat})
-			// setTimeout(function (that) {
-			// 	egret.Tween.get(this.txtGreen).to({ visible:true,scaleX: 1.2, scaleY: 1.2 }, 800)
-			// 		.to({ scaleX: 1, scaleY: 1, alpha: 0 }, 800).call(
-			// 			() => {
-			// 				this.txtGreen.alpha = 1;
-			// 				this.txtGreen.visible = false;
-			// 			}
-			// 		)
-			// }
-			// , this.mData.showIdx * 1600, this);
-		// }
+		AppFacade.getInstance().sendNotification(OrderBoxMediator.collectItem2Show, { item: this, stat: this.mData.stat })
+		this.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onTapBegin,this);
+		this.addEventListener(egret.TouchEvent.TOUCH_END,this.onTapEnd,this);
+		this.addEventListener(egret.TouchEvent.TOUCH_RELEASE_OUTSIDE,this.onTapEnd,this);
+	}
+	private onTapBegin(){
+		this.imgBg.fillColor =  0x161111;
+	}
+	private onTapEnd(){
+		this.imgBg.fillColor =  0xB5B3B3;
 	}
 	private setViewStatus(sta: EnumOrderBoxStatus) {
 		this.txtGreen.visible = sta === EnumOrderBoxStatus.CORRECT;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="OrderBoxSceneSkin" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+<e:Skin class="OrderBoxSceneSkin" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:ns1="*">
 	<e:Rect width="100%" height="100%" horizontalCenter="0" verticalCenter="0" strokeColor="0xf9fbfc" fillColor="0x58b9e8"/>
-	<e:Button id="btnAgainInGame" label="重新来" scaleX="2" scaleY="2" left="0" top="0" visible="false"/>
+	<e:Button id="btnAgainInGame" label="重新来" scaleX="1" scaleY="1" left="0" top="139"/>
 	<e:Group x="205" y="39">
 		<e:List id="listMain" itemRendererSkinName="OrderBoxItemSkin" x="0" y="0">
 			<e:ArrayCollection>
@@ -36,4 +36,7 @@
 		<e:Label id="txtInstruct" text="点击START开始，动画播放完毕后，按照播放顺序点击方块即可过关" textColor="0xe85912" size="36" bold="true" width="595" y="138" horizontalCenter="0" visible="false"/>
 	</e:Group>
 	<e:Group id="groupMask" width="100%" height="100%" horizontalCenter="0" verticalCenter="0" touchThrough="false" touchEnabled="true" touchChildren="false" visible="false"/>
+	<e:Group left="0" width="100%" top="0">
+		<e:Label id="btnBack" text="Back" size="70" verticalCenter="0" left="0" textColor="0x14525b"/>
+	</e:Group>
 </e:Skin>

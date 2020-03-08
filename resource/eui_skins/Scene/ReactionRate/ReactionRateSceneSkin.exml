@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="ReactioonRateSceneSkin" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
-	<e:Rect width="1334" height="750" horizontalCenter="0" verticalCenter="0" fillColor="0x4c5450"/>
+<e:Skin class="ReactionRateSceneSkin" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:ns1="*">
+	<e:Rect width="1334" height="750" horizontalCenter="0" verticalCenter="0" fillColor="0xcecac0"/>
 	<e:Group width="618" height="618" horizontalCenter="0" verticalCenter="0">
 		<e:Group id="groupLock" width="618" height="618" anchorOffsetX="0" anchorOffsetY="0" horizontalCenter="0" verticalCenter="0">
 		</e:Group>
@@ -18,10 +18,13 @@
 				<e:HorizontalLayout gap="-42" horizontalAlign="center" verticalAlign="middle"/>
 			</e:layout>
 		</e:List>
-		<e:Label id="labelLockStatus" text="lock" horizontalCenter="0" verticalCenter="67" bold="true" textColor="0xf90707"/>
+		<e:Label id="labelLockStatus" text="锁定中" horizontalCenter="0" verticalCenter="67" bold="true" textColor="0xf90707"/>
 	</e:Group>
-	<e:Group x="78" verticalCenter="0">
-		<e:Button id="btnRestart" label="重来" x="0" y="0" width="200" height="100"/>
-		<e:Button id="btnSwitch" label="start" x="0" y="199" width="200" height="100"/>
+	<e:Group x="78" verticalCenter="0" width="200" height="300">
+		<e:Button id="btnRestart" label="重来" y="0" width="200" height="100" horizontalCenter="0"/>
+		<e:Button id="btnSwitch" label="start" y="199" width="200" height="100" horizontalCenter="0"/>
+	</e:Group>
+	<e:Group left="0" width="100%" top="0">
+		<e:Label id="btnBack" text="Back" size="70" verticalCenter="0" left="0" textColor="0x14525b"/>
 	</e:Group>
 </e:Skin>
