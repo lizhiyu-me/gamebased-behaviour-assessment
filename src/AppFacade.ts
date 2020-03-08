@@ -13,15 +13,11 @@ class AppFacade {
     }
     /**初始化相关命令等 */
     initApp(mainLayer: eui.UILayer) {
-        this.initLayer(mainLayer);
         //注册层级管理中介
         this.registerMediator(LayerMediator, mainLayer);
+        this.registerMediator(MessageMediator,null);
         //注册启动命令
         this.registerSimpleCommand(CMD_StartUp);
-    }
-    //TODO layerMrg
-    private initLayer(mainLayer) {
-        
     }
     private mCommandDic = {};
     registerSimpleCommand(command) {

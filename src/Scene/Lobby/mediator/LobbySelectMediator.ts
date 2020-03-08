@@ -20,6 +20,10 @@ class LobbySelectMediator implements IMediator {
     }
     private initView() {
         this.view.listEntry.addEventListener(eui.ItemTapEvent.ITEM_TAP, this.onEntryListTap, this);
+        this.view.btnCopy.addEventListener(egret.TouchEvent.TOUCH_TAP,()=>{
+            Utils.copyToBoard(this.view.labelUrl.text);
+            (AppFacade.getInstance().retriveMediator(MessageMediator.NAME) as MessageMediator).showFloatTip('复制成功')
+        },this);
         this.getCfg();
     }
     private getCfg() {

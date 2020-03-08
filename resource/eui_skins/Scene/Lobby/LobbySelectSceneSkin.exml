@@ -17,4 +17,9 @@
 			</e:List>
 		</e:Group>
 	</e:Scroller>
+	<e:Group bottom="0" right="34">
+		<e:Label text="如果本游戏对您有所帮助，欢迎到本项目github地址提交建议反馈" x="1" y="0"/>
+		<e:Label id="labelUrl" text="https://github.com/PotentialSteffan/GameBased_Behaviour_Assessment" x="0" y="34"/>
+		<e:Button id="btnCopy" label="复制" x="999" y="16"/>
+	</e:Group>
 </e:Skin>

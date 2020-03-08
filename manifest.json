@@ -10,7 +10,7 @@
 	"game": [
 		"bin-debug/Base/BaseView.js",
 		"bin-debug/Decoration/ScaleButton_FnDecoration.js",
-		"bin-debug/Interface/ICommand.js",
+		"bin-debug/Interface/IMediator.js",
 		"bin-debug/Main.js",
 		"bin-debug/Platform.js",
 		"bin-debug/ThemeAdapter.js",
@@ -19,9 +19,10 @@
 		"bin-debug/Component/TopBanner.js",
 		"bin-debug/Const/GlobalConst.js",
 		"bin-debug/LoadingUI.js",
+		"bin-debug/Interface/ICommand.js",
 		"bin-debug/AssetAdapter.js",
-		"bin-debug/Interface/IMediator.js",
 		"bin-debug/Manager/LayerMediator.js",
+		"bin-debug/Manager/MessageMediator.js",
 		"bin-debug/Scene/Lobby/mediator/LobbySelectMediator.js",
 		"bin-debug/Scene/Lobby/view/LobbySelectScene.js",
 		"bin-debug/Scene/Lobby/view/component/LobbyEntryItemView.js",
@@ -29,6 +30,7 @@
 		"bin-debug/Scene/OrderScene/view/OrderBoxScene.js",
 		"bin-debug/Scene/OrderScene/view/component/OrderBoxItemRenderer.js",
 		"bin-debug/Scene/ReactionRateScene/mediator/ReactionRateMediator.js",
-		"bin-debug/Scene/ReactionRateScene/view/ReactionRateScene.js"
+		"bin-debug/Scene/ReactionRateScene/view/ReactionRateScene.js",
+		"bin-debug/Utils/Utils.js"
 	]
 }
