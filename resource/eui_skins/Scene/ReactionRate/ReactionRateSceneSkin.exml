@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin class="ReactionRateSceneSkin" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:ns1="*">
-	<e:Rect width="1334" height="750" horizontalCenter="0" verticalCenter="0" fillColor="0xcecac0"/>
+	<e:Rect width="1664" height="1000" horizontalCenter="0" verticalCenter="0" fillColor="0xcecac0"/>
 	<e:Group width="618" height="618" horizontalCenter="0" verticalCenter="0">
 		<e:Group id="groupLock" width="618" height="618" anchorOffsetX="0" anchorOffsetY="0" horizontalCenter="0" verticalCenter="0">
 		</e:Group>
@@ -20,11 +20,12 @@
 		</e:List>
 		<e:Label id="labelLockStatus" text="锁定中" horizontalCenter="0" verticalCenter="67" bold="true" textColor="0xf90707"/>
 	</e:Group>
-	<e:Group x="78" verticalCenter="0" width="200" height="300">
-		<e:Button id="btnRestart" label="重来" y="0" width="200" height="100" horizontalCenter="0"/>
-		<e:Button id="btnSwitch" label="start" y="199" width="200" height="100" horizontalCenter="0"/>
+	<e:Group width="200" left="0" top="139">
+		<e:Button id="btnRestart" label="再来一次" y="0" width="200" height="100" horizontalCenter="0"/>
 	</e:Group>
 	<e:Group left="0" width="100%" top="0">
-		<e:Label id="btnBack" text="Back" size="70" verticalCenter="0" left="0" textColor="0x14525b"/>
+		<e:Label id="btnBack" text="&lt;" size="70" verticalCenter="0" left="0" textColor="0x14525b" width="92" textAlign="center"/>
 	</e:Group>
+	<e:Button id="btnSwitch" label="开始" width="200" height="100" right="87" verticalCenter="77"/>
+	<e:Label text="点击开始按钮，锁盘旋转。\n\n点击暂停按钮，依次使指针停留在屏幕中央显示的数字位置即可" width="265" right="59" verticalCenter="-131" textColor="0xe85912"/>
 </e:Skin>

@@ -21,7 +21,7 @@ class AppFacade {
     }
     //TODO layerMrg
     private initLayer(mainLayer) {
-
+        
     }
     private mCommandDic = {};
     registerSimpleCommand(command) {

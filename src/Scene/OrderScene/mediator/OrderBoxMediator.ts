@@ -18,8 +18,7 @@ class OrderBoxMediator implements IMediator {
     /**皮肤加载完毕 */
     onViewUIComplete() {
         let _layerMediator = AppFacade.getInstance().retriveMediator(LayerMediator.NAME) as LayerMediator;
-        let _mainLayer = _layerMediator.view;
-        _mainLayer.addChild(this.view);
+        _layerMediator.addScene(this.view);
         this.initView();
     }
     private mListMainDataProvider: eui.ArrayCollection;

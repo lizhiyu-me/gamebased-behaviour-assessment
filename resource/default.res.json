@@ -122,21 +122,6 @@
 			"name": "track_sb_png"
 		},
 		{
-			"url": "assets/bg.jpg",
-			"type": "image",
-			"name": "bg_jpg"
-		},
-		{
-			"url": "assets/egret_icon.png",
-			"type": "image",
-			"name": "egret_icon_png"
-		},
-		{
-			"url": "config/description.json",
-			"type": "json",
-			"name": "description_json"
-		},
-		{
 			"url": "config/lobbyEntryCfg.json",
 			"type": "json",
 			"name": "lobbyEntryCfg_json"
