@@ -1,19 +1,23 @@
-class OrderBoxItemRenderer extends eui.ItemRenderer {
+class OrderBoxItemRenderer extends eui.Component {
+
 	public imgBg: eui.Rect;
 	public txtGreen: eui.Label;
 	public txtRed: eui.Label;
 
 	public constructor() {
 		super();
+		this.skinName = 'OrderBoxItemSkin';
 	}
-	private mData: IorderBoxItemData;
-	protected dataChanged() {
-		super.dataChanged();
-		this.mData = this.data;
-		AppFacade.getInstance().sendNotification(OrderBoxMediator.collectItem2Show, { item: this, stat: this.mData.stat })
+	childrenCreated(){
+		super.childrenCreated();
 		this.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onTapBegin,this);
 		this.addEventListener(egret.TouchEvent.TOUCH_END,this.onTapEnd,this);
 		this.addEventListener(egret.TouchEvent.TOUCH_RELEASE_OUTSIDE,this.onTapEnd,this);
+	}
+	playAni(cb,that){
+		egret.log("playAni")
+		 egret.Tween.get(this.txtGreen).to({visible: true}).to({ scaleX: 1.2, scaleY: 1.2 }, 300)
+			.to({ scaleX: 1, scaleY: 1, alpha: 0 }, 300).to({alpha:1,visible:false}).call(cb,that);
 	}
 	private onTapBegin(){
 		this.imgBg.fillColor =  0x161111;

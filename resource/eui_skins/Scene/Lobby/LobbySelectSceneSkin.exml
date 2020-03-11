@@ -2,7 +2,7 @@
 <e:Skin class="LobbySelectSceneSkin" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
 	<e:Rect width="1664" height="1000" horizontalCenter="0" verticalCenter="0" fillColor="0x4492ed"/>
 	<e:Label text="点击选择关卡" textColor="0x262323" size="83" horizontalCenter="0" top="42"/>
-	<e:Scroller width="1178" height="508" y="156" anchorOffsetX="0" anchorOffsetY="0" horizontalCenter="0">
+	<e:Scroller width="1178" height="508" anchorOffsetX="0" anchorOffsetY="0" horizontalCenter="0" verticalCenter="18">
 		<e:Group>
 			<e:List id="listEntry" itemRendererSkinName="LobbyEntryItemSkin" horizontalCenter="0">
 				<e:ArrayCollection>
@@ -18,8 +18,10 @@
 		</e:Group>
 	</e:Scroller>
 	<e:Group bottom="0" right="34">
-		<e:Label text="如果本游戏对您有所帮助，欢迎到本项目github地址提交建议反馈" x="1" y="0"/>
-		<e:Label id="labelUrl" text="https://github.com/PotentialSteffan/GameBased_Behaviour_Assessment" x="0" y="34"/>
-		<e:Button id="btnCopy" label="复制" x="999" y="16"/>
+		<e:Group x="0" verticalCenter="0">
+			<e:Label text="如果本游戏对您有所帮助，欢迎到本项目github地址提交建议反馈" x="1" y="0"/>
+			<e:Label id="labelUrl" text="https://github.com/PotentialSteffan/GameBased_Behaviour_Assessment" x="0" y="34"/>
+		</e:Group>
+		<e:Button id="btnCopy" label="复制" x="999" skinName="ButtonSkin" verticalCenter="0" scaleX="0.8" scaleY="0.8"/>
 	</e:Group>
 </e:Skin>

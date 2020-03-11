@@ -42,6 +42,7 @@ class Main extends eui.UILayer {
 
     private async loadResource() {
         try {
+            this.removeLaunchImg();
             const loadingView = new LoadingUI();
             this.stage.addChild(loadingView);
             await RES.loadConfig("resource/default.res.json", "resource/");
@@ -69,5 +70,15 @@ class Main extends eui.UILayer {
             }, this);
 
         })
+    }
+     private removeLaunchImg() {
+        try {
+            let _div: Element = document.body.getElementsByClassName("launch")[0];
+            if (_div) {
+                _div.remove();
+            }
+        } catch (e) {
+            console.log(e);
+        }
     }
 }

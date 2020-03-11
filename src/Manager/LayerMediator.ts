@@ -24,6 +24,7 @@ class LayerMediator implements IMediator {
             let _topLayer =  new eui.UILayer();
             _topLayer.name = 'top';
             _topLayer.touchThrough = true;
+            _topLayer.touchEnabled = false;
             this.mLayerDic[ELayer.TOP] =_topLayer;
             this.mStage.addChild(_topLayer);
         }

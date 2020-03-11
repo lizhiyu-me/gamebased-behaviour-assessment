@@ -1,158 +1,119 @@
 class OrderBoxMediator implements IMediator {
     static NAME: string = 'OrderBoxIMediator';
     private mView: OrderBoxScene;
+    private mFloatMessageMrg: MessageMediator;
     constructor(view) {
         this.registerNotifications();
         this.mView = new view();
         this.mView.setBelongMediator && this.mView.setBelongMediator(this);
+        this.mFloatMessageMrg = AppFacade.getInstance().retriveMediator(MessageMediator.NAME) as MessageMediator;
+        this.view.addEventListener(egret.Event.REMOVED_FROM_STAGE,this.onRemove,this);
     }
     get view(): OrderBoxScene {
         return this.mView;
     }
-    static collectItem2Show: string = 'collectItem2Show';
+    // static collectItem2Show: string = 'collectItem2Show';
     registerNotifications() {
         AppFacade.getInstance().registerNotifications(this, [
-            OrderBoxMediator.collectItem2Show,
+            // OrderBoxMediator.collectItem2Show,
         ])
     }
     /**皮肤加载完毕 */
     onViewUIComplete() {
+        this.mHasRemove = false;
         let _layerMediator = AppFacade.getInstance().retriveMediator(LayerMediator.NAME) as LayerMediator;
         _layerMediator.addScene(this.view);
         this.initView();
     }
-    private mListMainDataProvider: eui.ArrayCollection;
     private initView() {
-        this.mListMainDataProvider = new eui.ArrayCollection();
-        this.view.listMain.itemRendererSkinName = 'OrderBoxItemSkin';
-        this.view.listMain.itemRenderer = OrderBoxItemRenderer;
-        this.view.listMain.dataProvider = this.mListMainDataProvider;
-
-        this.view.listMain.addEventListener(eui.ItemTapEvent.ITEM_TAP, this.onListItemTap, this);
         this.view.btnStart.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onStart, this);
         this.view.btnAgain.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onAgain, this);
         this.view.btnAgainInGame.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onAgain, this);
         this.view.groupMask.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onMask, this);
-        this.recoverView();
+        this.view.groupMain.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onListItemTap, this);
+        this.recoverViewWhenGameStart();
     }
     private onStart() {
         this.view.btnStart.visible = false;
-        this.view.txtInstruct.visible = false;
+        this.view.btnAgain.visible = false;
+        this.view.btnAgainInGame.visible = false;
         this.view.groupMask.visible = true;
-        this.itemAni();
-        // this.refreshDataAndShowAni();
+        this.view.txtInstruct.visible = false;
+        this.refreshData();
+        this.showAni();
     }
     private onAgain() {
-        this.recoverView();
+        // this.recoverViewWhenGameEnd();
+         this.resetData();
+        this.onStart();
     }
-    private refreshDataAndShowAni() {
+    private showAni() {
+        this.itemAni();
+    }
+    private refreshData() {
         let _itemData = this.getNewData();
-        this.mListMainDataProvider.source = _itemData;
-        this.mListMainDataProvider.refresh();
-
+        for (let i in this.mStepData) {
+            let itemDisplay = (this.view.groupMain as eui.Group).getChildAt(this.mStepData[i]);
+            this.mItems2Show.push(itemDisplay);
+        }
     }
     private itemAni() {
+        if(this.mHasRemove)return;
         let _el: OrderBoxItemRenderer = this.mItems2Show.shift();
         if (!_el) {
             this.view.groupMask.visible = false;
-            this.showFloatBegin();
+            this.mFloatMessageMrg.showFloatTip("开始吧", 0x0000ff);
             return;
         }
-        egret.Tween.get(_el.txtGreen).to({ visible: true, scaleX: 1.2, scaleY: 1.2 }, 800)
-            .to({ scaleX: 1, scaleY: 1, alpha: 0 }, 800).call(
-            () => {
-                _el.txtGreen.alpha = 1;
-                _el.txtGreen.visible = false;
-                this.itemAni();
-            }
-            )
+        _el.playAni(this.itemAni, this);
 
     }
-    private mItems2Show: OrderBoxItemRenderer[] = [];
-    private rendererCount: number = 0;
-    private mItemHashDic = {};
-    public collectItem2Show(data) {
-        //TODO 未知原因渲染两次
-        if (data.stat === EnumOrderBoxStatus.CORRECT) {
-            if(!this.mItemHashDic[data.item.hashCode]){
-                this.mItems2Show.push(data.item);
-                this.mItemHashDic[data.item.hashCode] = true;
-            }
-        }
-        this.rendererCount++;
-        if (this.rendererCount === this.mItemLen) {
-            this.view.btnStart.visible = true;
-            this.mItems2Show.sort((a, b) => {
-                return a['mData']["showIdx"] - b['mData']['showIdx']
-            })
-        }
+    private mItems2Show = [];
+    /**游戏过关恢复场景 */
+    private recoverViewWhenGameEnd() {
+        this.view.txtInstruct.visible = false;
+        this.view.btnAgainInGame.visible = false;
+        this.view.btnAgain.visible = true;
+        this.resetData();
+        this.refreshData();
     }
-    /**还原场景组件状态及数据 */
-    private recoverView() {
-        // this.view.btnStart.visible = true;
+    private resetData(){
+         this.mClickStep = 0;
+        this.mItems2Show.length = 0;
+        this.errorTime = 0;
+    }
+    private recoverViewWhenGameStart() {
         this.view.txtInstruct.visible = true;
+        this.view.btnStart.visible = true;
         this.view.btnAgainInGame.visible = false;
         this.view.btnAgain.visible = false;
-        this.mClickStep = 0;
-        this.mItems2Show.length = 0;
-        this.rendererCount = 0;
-        this.mItemHashDic = {};
-        this.errorTime = 0;
-        this.refreshDataAndShowAni();
+        this.view.groupMask.visible = true;        
+        this.resetData();
     }
     private mClickStep: number = 0;
-    private onListItemTap(e: eui.ItemTapEvent) {
-        if (this.mStepData[this.mClickStep] !== e.item.skinIdx) {
+    private onListItemTap(e: egret.Event) {
+        let _skinIdx = this.view.groupMain.getChildIndex(e.target.parent);
+        if (this.mStepData[this.mClickStep] !== _skinIdx) {
             this.showFloat(EnumOrderBoxStatus.WRONG);
             return;
         } else {
             if (this.mToalStepCount === this.mClickStep + 1) {
-                this.showFloatWin();
+                this.mFloatMessageMrg.showFloatTip("恭喜过关", 0x00ff00);
+                this.recoverViewWhenGameEnd();
                 return;
             }
-            this.showFloatCorrect();
+            this.showFloat(EnumOrderBoxStatus.CORRECT);
             this.mClickStep++;
         }
     }
-    private errorTime:number = 0;
+    private errorTime: number = 0;
     private showFloat(type: EnumOrderBoxStatus) {
         if (type === EnumOrderBoxStatus.CORRECT) {
-            this.showFloatCorrect();
+            this.mFloatMessageMrg.showFloatTip("不错哟", 0x00ff00);
         } else {
-            if(++this.errorTime > 6) this.view.btnAgainInGame.visible = true;
-            this.showFloatError();
+            if (++this.errorTime > 6) this.view.btnAgainInGame.visible = true;
+            this.mFloatMessageMrg.showFloatTip("再试试", 0xff0000);
         }
-    }
-    private showFloatCorrect() {
-        egret.Tween.get(this.view.txtCorrect).to({ visible: true }).to({ alpha: 0 }, 500).call(
-            () => {
-                this.view.txtCorrect.visible = false;
-                this.view.txtCorrect.alpha = 1;
-            }
-        )
-    }
-    private showFloatError() {
-        egret.Tween.get(this.view.txtWrong).to({ visible: true }).to({ alpha: 0 }, 500).call(
-            () => {
-                this.view.txtWrong.visible = false;
-                this.view.txtWrong.alpha = 1;
-            }
-        )
-    }
-    private showFloatWin() {
-        egret.Tween.get(this.view.txtComplete).to({ visible: true }).to({ scaleX: 1.6, scaleY: 1.6 }, 500).call(
-            () => {
-                this.view.txtComplete.visible = false;
-                this.view.btnAgain.visible = true;
-            }
-        );
-    }
-    private showFloatBegin() {
-        egret.Tween.get(this.view.txtWarning).to({ visible: true }).to({ scaleX: 1.6, scaleY: 1.6 }, 800).call(
-            () => {
-                this.view.txtWarning.visible = false;
-            }
-        );
     }
     private mToalStepCount: number = 0;
     private mStepData: { [step: number]: number } = {};
@@ -192,6 +153,10 @@ class OrderBoxMediator implements IMediator {
     }
     onRegister() {
         if (this.view.hasUICompleteCache) this.onViewUIComplete();
+    }
+    private mHasRemove:boolean;
+    private onRemove(){
+        this.mHasRemove = true;
     }
 
 

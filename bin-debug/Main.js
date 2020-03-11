@@ -89,6 +89,7 @@ var Main = (function (_super) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 4, , 5]);
+                        this.removeLaunchImg();
                         loadingView = new LoadingUI();
                         this.stage.addChild(loadingView);
                         return [4 /*yield*/, RES.loadConfig("resource/default.res.json", "resource/")];
@@ -128,6 +129,18 @@ var Main = (function (_super) {
             }, _this);
         });
     };
+    Main.prototype.removeLaunchImg = function () {
+        try {
+            var _div = document.body.getElementsByClassName("launch")[0];
+            if (_div) {
+                _div.remove();
+            }
+        }
+        catch (e) {
+            console.log(e);
+        }
+    };
     return Main;
 }(eui.UILayer));
 __reflect(Main.prototype, "Main");
+//# sourceMappingURL=Main.js.map
