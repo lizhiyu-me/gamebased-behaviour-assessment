@@ -16,8 +16,8 @@ class OrderBoxItemRenderer extends eui.Component {
 	}
 	playAni(cb,that){
 		egret.log("playAni")
-		 egret.Tween.get(this.txtGreen).to({visible: true}).to({ scaleX: 1.2, scaleY: 1.2 }, 300)
-			.to({ scaleX: 1, scaleY: 1, alpha: 0 }, 300).to({alpha:1,visible:false}).call(cb,that);
+		 egret.Tween.get(this.txtGreen).to({visible: true}).to({ scaleX: 1.2, scaleY: 1.2 }, 800)
+			.to({ scaleX: 1, scaleY: 1, alpha: 0 }, 800).to({alpha:1,visible:false}).call(cb,that);
 	}
 	private onTapBegin(){
 		this.imgBg.fillColor =  0x161111;
