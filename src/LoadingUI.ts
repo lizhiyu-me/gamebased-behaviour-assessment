@@ -28,24 +28,51 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 class LoadingUI extends egret.Sprite implements RES.PromiseTaskReporter {
-
-    public constructor() {
+    private mStage: egret.Stage;
+    private mWidth: number;
+    public constructor(stage: egret.Stage) {
         super();
+        this.mStage = stage;
+        this.width = this.mStage.stageWidth;
+        this.height = this.mStage.stageHeight;
+        this.mWidth = this.mStage.stageWidth
         this.createView();
     }
 
     private textField: egret.TextField;
-
+    private mProgressRect: eui.Rect;
     private createView(): void {
         this.textField = new egret.TextField();
-        this.addChild(this.textField);
-        this.textField.y = 300;
         this.textField.width = 480;
         this.textField.height = 100;
         this.textField.textAlign = "center";
+        this.textField.verticalAlign = "middle";
+
+        let _progressContainer = new egret.Sprite();
+        _progressContainer.width = this.mWidth;
+        _progressContainer.height = 120;
+        let _bgRect = new eui.Rect();
+        _bgRect.width = this.mWidth;
+        _bgRect.height = 120;
+        this.mProgressRect = new eui.Rect();
+        this.mProgressRect.height = 120;
+        this.mProgressRect.fillColor = 0x00ff00;
+
+
+        _progressContainer.addChild(_bgRect);
+        _progressContainer.addChild(this.mProgressRect);
+        _progressContainer.addChild(this.textField);
+        this.textField.x = (_progressContainer.width - this.textField.width) / 2;
+        this.textField.y = (_progressContainer.height - this.textField.height) / 2;
+        _progressContainer.y =0;
+        _progressContainer.x = (this.mWidth - _progressContainer.width) / 2;
+        this.addChild(_progressContainer);
+
     }
 
     public onProgress(current: number, total: number): void {
         this.textField.text = `Loading...${current}/${total}`;
+        let _rate: number = current / total;
+        this.mProgressRect.width = _rate * this.mWidth;
     }
 }

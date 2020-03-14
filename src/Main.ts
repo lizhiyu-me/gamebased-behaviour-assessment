@@ -32,6 +32,8 @@ class Main extends eui.UILayer {
         await this.loadResource()
         AppFacade.getInstance(this);
         AppFacade.getInstance().sendCommand(CMD_StartUp.NAME);
+
+
         // const result = await RES.getResAsync("description_json")
         // this.startAnimation(result);
         // await platform.login();
@@ -43,7 +45,7 @@ class Main extends eui.UILayer {
     private async loadResource() {
         try {
             this.removeLaunchImg();
-            const loadingView = new LoadingUI();
+            const loadingView = new LoadingUI( this.stage);
             this.stage.addChild(loadingView);
             await RES.loadConfig("resource/default.res.json", "resource/");
             await this.loadTheme();
