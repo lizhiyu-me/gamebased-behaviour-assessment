@@ -1,13 +1,16 @@
-class ReactionRateMediator implements IMediator {
+class ReactionRateMediator extends BaseMediator {
     static NAME: string = 'ReactionRateMediator';
-    private mView: ReactionRateScene;
+    mView: ReactionRateScene;
+    skin:string = "ReactionRateSceneSkin";
     constructor(view) {
-        this.registerNotifications();
-        this.mView = new view();
-        this.mView.setBelongMediator && this.mView.setBelongMediator(this);
+        super(view)
+        this.setSkin();
     }
     get view(): ReactionRateScene {
         return this.mView;
+    }
+     setSkin(){
+        this.view.skinName = this.skin;
     }
     registerNotifications() {
         AppFacade.getInstance().registerNotifications(this, [
@@ -56,25 +59,37 @@ class ReactionRateMediator implements IMediator {
             return _random;
         };
     }
+    /**关卡数 */
+    private mLevelCount:number = 6;
+    /**当前关卡 */
+    private mCurLevel:number = 0;
+
     private mPointerArc: number;
     private getPointerArc(baseArc: number) {
-        this.mPointerArc = baseArc * 2;
+        this.mPointerArc = baseArc * (1+(this.mLevelCount - this.mCurLevel)/this.mLevelCount);
         return this.mPointerArc;
     }
-    private mPointer: { container: egret.DisplayObjectContainer, arc: number, shape: egret.Shape }
-    /**生成指针 */
-    private generatePointerObj(): egret.DisplayObjectContainer {
-        if (!this.mPointer) this.mPointer = {} as { container: egret.DisplayObjectContainer, arc: number, shape: egret.Shape };
-        let _secContainer = this.generateSectionContainer();
-        let _pointer = this.generateSectionArc({
+    private getNextPointer(){
+        if(!this.mPointer)return;
+        this.mPointer.shape = this.generatePointer();
+    }
+    private generatePointer(){
+       return  this.generateSectionArc({
             sectionWidth: this.mInitialParamOfSection.sectionWidth,
             radius: this.mInitialParamOfSection.radius,
             angle2ArcUnit: this.mInitialParamOfSection.angle2ArcUnit,
             sectionArc: this.getPointerArc(this.mInitialParamOfSection.sectionArc)
         }
             , 0xEFC562);
+    }
+    private mPointer: { container: egret.DisplayObjectContainer, arc: number, shape: egret.Shape }
+    /**生成指针 */
+    private generatePointerObj(): egret.DisplayObjectContainer {
+        if (!this.mPointer) this.mPointer = {} as { container: egret.DisplayObjectContainer, arc: number, shape: egret.Shape };
+        let _secContainer = this.generateSectionContainer();
+        let _pointer = this.generatePointer();
         _secContainer.addChild(_pointer);
-        this.mPointer.arc = this.mInitialParamOfSection.sectionArc;
+        // this.mPointer.arc = this.mInitialParamOfSection.sectionArc;
         this.mPointer.container = _secContainer;
         this.mPointer.shape = _pointer;
         _secContainer.alpha = .6;
@@ -88,6 +103,10 @@ class ReactionRateMediator implements IMediator {
         this.mMarkArcObj.addChild(this.generateSectionArc(this.mInitialParamOfSection, 0xff0000));
         return this.mMarkArcObj;
     }
+    /**盘面总份数 */
+    private mTotalSectionCount:number = 10;
+    /**直径 */
+    private mDiameter:number = 618;
     private mBaseData: { diameter, radius, angle2ArcUnit, arc2angleUnit, sectionWidth };
     private generateBaseData(diameter): { diameter, radius, angle2ArcUnit, arc2angleUnit, sectionWidth } {
         if (!this.mBaseData) this.mBaseData = {} as { diameter, radius, angle2ArcUnit, arc2angleUnit, sectionWidth };
@@ -95,12 +114,12 @@ class ReactionRateMediator implements IMediator {
         this.mBaseData.radius = diameter / 2;
         this.mBaseData.angle2ArcUnit = Math.PI / 180;
         this.mBaseData.arc2angleUnit = 180 / Math.PI;
-        //TODO calculate by setting count
-        this.mBaseData.sectionWidth = 192;
+        this.mBaseData.sectionWidth = Math.sin(360/this.mTotalSectionCount/2*Math.PI/180)*this.mDiameter;
+
         return this.mBaseData;
     }
     /**生成锁盘界面 */
-    private generateLockPanel(sectionCount: number = this.view.sectionCount, diameter: number = 618) {
+    private generateLockPanel(sectionCount: number = this.mTotalSectionCount, diameter: number = this.mDiameter) {
         let _baseData = this.generateBaseData(diameter);
         let _count = sectionCount;
         let _sectionArc = _baseData.angle2ArcUnit * 360 / _count;
@@ -126,7 +145,7 @@ class ReactionRateMediator implements IMediator {
         _sectionContainer.width = _baseData.diameter;
         _sectionContainer.height = _baseData.diameter;
         _container.addChildAt(_sectionContainer, 1);
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < sectionCount; i++) {
             let _itemContainer: egret.DisplayObjectContainer = this.generateSectionContainer();
             if (!this.mInitialParamOfSection) this.mInitialParamOfSection = {
                 sectionWidth: _baseData.sectionWidth,
@@ -148,15 +167,21 @@ class ReactionRateMediator implements IMediator {
             _labelNum.rotation = -i * _sectionArc * _baseData.arc2angleUnit;
 
             _sectionContainer.addChild(_itemContainer);
-            _sectionContainer.cacheAsBitmap = true;
+            
+            // _sectionContainer.cacheAsBitmap = true;
         }
-        _container.addChildAt(this.generatePointerObj(), 2);
-        _container.addChildAt(this.generateMarkArcObj(), 2);
-
+        this.addPointer(_container);
+        this.addMask(_container);
         this.initResultCheckDic(_count);
         this.setMarkArcObjPos();
 
         // this.onStart();
+    }
+    private addPointer(container:eui.Group = this.view.groupLock){
+        container.addChildAt(this.generatePointerObj(), 2);
+    }
+    private addMask(container:eui.Group = this.view.groupLock){
+        container.addChildAt(this.generateMarkArcObj(), 2);
     }
     private mInitialParamOfSection: { sectionWidth, radius, angle2ArcUnit, sectionArc };
     private generateSectionArc(param: { sectionWidth, radius, angle2ArcUnit, sectionArc }, color: number = 0x513B06): egret.Shape {
@@ -204,6 +229,10 @@ class ReactionRateMediator implements IMediator {
             //check is success
             if (this.mCurStep === 4) {
                 this.view.setLabelStatus(true);
+                //自动进入下一关
+                this.mCurLevel++;
+                this.getNextPointer();
+                this.onAgain();
             }
             let _item = this.mCenterNumberDataProvider.source[this.mCurStep];
             _item.color = 0x00ff00;
@@ -222,6 +251,7 @@ class ReactionRateMediator implements IMediator {
             //TODO: storage critical value in dic to avoid frequently claculate
             let _centerDistance;
             let _absDistance;
+            //第一个section
             if (_constAngle === 0 && this.mPointerRotateAngle) {
                 var _temp = 360 - this.mPointerRotateAngle;
                 this.mPointerRotateAngle = Math.min(_temp,this.mPointerRotateAngle);
@@ -277,8 +307,6 @@ class ReactionRateMediator implements IMediator {
         this.view.resumeSwitchBtn();
     }
     onRegister() {
-        if (this.view.hasUICompleteCache) this.onViewUIComplete();
+       
     }
-
-
 }

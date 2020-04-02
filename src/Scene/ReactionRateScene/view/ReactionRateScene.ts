@@ -1,6 +1,5 @@
 ///<reference path="../../../Component/TopBanner.ts"/>
 class ReactionRateScene extends BaseView {
-    public readonly skinName = "ReactionRateSceneSkin";
     //====ui begin====
     public groupLock: eui.Group;
     public btnSwitch: eui.Button;
@@ -13,8 +12,6 @@ class ReactionRateScene extends BaseView {
 
 
     //====ui end====
-
-    public sectionCount: number = 10;
 
     constructor() {
         super(true);

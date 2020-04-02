@@ -1,10 +1,10 @@
-class LobbySelectMediator implements IMediator {
+class LobbySelectMediator extends BaseMediator {
     static NAME: string = "LobbySelectMediator";
-    private mView: LobbySelectScene;
+    skin:string = "LobbySelectSceneSkin";
+    mView: LobbySelectScene;
     constructor(view) {
-        this.registerNotifications();
-        this.mView = new view();
-        this.mView.setBelongMediator && this.mView.setBelongMediator(this);
+        super(view);
+         this.setSkin();
     }
     get view() {
         return this.mView;
@@ -12,6 +12,9 @@ class LobbySelectMediator implements IMediator {
     registerNotifications() {
 
     };
+    setSkin(){
+        this.view.skinName = this.skin;
+    }
     /**皮肤加载完毕 */
     onViewUIComplete() {
         let _layerMediator = AppFacade.getInstance().retriveMediator(LayerMediator.NAME) as LayerMediator;
@@ -31,7 +34,6 @@ class LobbySelectMediator implements IMediator {
         this.view.listEntry.dataProvider = new eui.ArrayCollection(_entryCfg);
     }
     onRegister() {
-        if (this.view.hasUICompleteCache) this.onViewUIComplete();
     };
     private onEntryListTap(e: eui.ItemTapEvent) {
         let _data = e.item;

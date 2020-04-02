@@ -1,13 +1,16 @@
-class OrderBoxMediator implements IMediator {
+class OrderBoxMediator extends BaseMediator {
     static NAME: string = 'OrderBoxIMediator';
-    private mView: OrderBoxScene;
+    skin:string = "OrderBoxSceneSkin";
+    mView: OrderBoxScene;
     private mFloatMessageMrg: MessageMediator;
     constructor(view) {
-        this.registerNotifications();
-        this.mView = new view();
-        this.mView.setBelongMediator && this.mView.setBelongMediator(this);
+        super(view);
         this.mFloatMessageMrg = AppFacade.getInstance().retriveMediator(MessageMediator.NAME) as MessageMediator;
         this.view.addEventListener(egret.Event.REMOVED_FROM_STAGE,this.onRemove,this);
+         this.setSkin();
+    }
+    setSkin(){
+        this.view.skinName = this.skin;
     }
     get view(): OrderBoxScene {
         return this.mView;
@@ -152,7 +155,6 @@ class OrderBoxMediator implements IMediator {
 
     }
     onRegister() {
-        if (this.view.hasUICompleteCache) this.onViewUIComplete();
     }
     private mHasRemove:boolean;
     private onRemove(){

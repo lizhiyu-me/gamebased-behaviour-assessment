@@ -18,8 +18,6 @@ class OrderBoxScene extends BaseView {
 
     constructor() {
         super(true);
-        this.skinName = 'OrderBoxSceneSkin';
-
     }
     childrenCreated() {
         super.childrenCreated();
