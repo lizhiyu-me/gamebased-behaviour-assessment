@@ -1,0 +1,15 @@
+{
+	"skins": {},
+	"autoGenerateExmlsList": true,
+	"exmls": [
+		"resource/eui_skins/component/ButtonSkin.exml",
+		"resource/eui_skins/component/TopBannerSkin.exml",
+		"resource/eui_skins/Scene/Lobby/component/LobbyEntryItemSkin.exml",
+		"resource/eui_skins/Scene/Lobby/LobbySelectSceneSkin.exml",
+		"resource/eui_skins/Scene/OrderBox/component/OrderBoxItemSkin.exml",
+		"resource/eui_skins/Scene/OrderBox/OrderBoxSceneSkin.exml",
+		"resource/eui_skins/Scene/ReactionRate/component/ReactionNumSkin.exml",
+		"resource/eui_skins/Scene/ReactionRate/ReactionRateSceneSkin.exml"
+	],
+	"path": "resource/default.thm.json"
+}

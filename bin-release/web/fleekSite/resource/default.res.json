@@ -1,0 +1,15 @@
+{
+	"groups": [
+		{
+			"keys": "lobbyEntryCfg_json",
+			"name": "preload"
+		}
+	],
+	"resources": [
+		{
+			"url": "config/lobbyEntryCfg.json",
+			"type": "json",
+			"name": "lobbyEntryCfg_json"
+		}
+	]
+}
