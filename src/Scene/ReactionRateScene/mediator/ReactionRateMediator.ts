@@ -20,13 +20,17 @@ class ReactionRateMediator implements IMediator {
         _layerMediator.addScene(this.view);
         this.initView();
     }
+    private mInitTargetArc;
+    private mDiameter:number = 618;
     private mCenterNumberDataProvider = new eui.ArrayCollection();
     private initView() {
+        this.generateBaseData(this.mDiameter);
+        this.mInitTargetArc = this.mBaseData.angle2ArcUnit * 360 / this.view.sectionCount;
         this.view.btnSwitch.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onSwitch, this);
         this.view.btnRestart.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onAgain, this);
         this.refreshCenterNumber();
         this.initRotateTimer();
-        this.generateLockPanel();
+        this.generateLockPanel(this.view.sectionCount,this.mInitTargetArc);
         this.view.listSecret.dataProvider = this.mCenterNumberDataProvider;
 
     }
@@ -73,7 +77,7 @@ class ReactionRateMediator implements IMediator {
             radius: this.mInitialParamOfSection.radius,
             angle2ArcUnit: this.mInitialParamOfSection.angle2ArcUnit,
             sectionArc: this.getPointerArc(this.mInitialParamOfSection.sectionTargetArc),
-            sectionTargetArc:this.getPointerArc(this.mInitialParamOfSection.sectionTargetArc)
+            sectionTargetArc: this.getPointerArc(this.mInitialParamOfSection.sectionTargetArc)
         }
             , 0xEFC562);
         _secContainer.addChild(_pointer);
@@ -88,7 +92,9 @@ class ReactionRateMediator implements IMediator {
     private generateMarkArcObj() {
         this.mMarkArcObj = this.generateSectionContainer();
         this.mMarkArcObj.alpha = .5;
-        this.mMarkArcObj.addChild(this.generateSectionArc(this.mInitialParamOfSection, 0xff0000));
+        let _section = this.generateSectionArc(this.mInitialParamOfSection, 0x00ff00);
+        egret.Tween.get(_section,{"loop":true}).to({alpha:0},300).to({alpha:.5},300)
+        this.mMarkArcObj.addChild(_section);
         return this.mMarkArcObj;
     }
     private mBaseData: { diameter, radius, angle2ArcUnit, arc2angleUnit, sectionWidth };
@@ -103,18 +109,22 @@ class ReactionRateMediator implements IMediator {
         return this.mBaseData;
     }
     /**生成锁盘界面 */
-    private generateLockPanel(sectionCount: number = this.view.sectionCount, diameter: number = 618) {
-        let _baseData = this.generateBaseData(diameter);
+    private generateLockPanel(sectionCount: number,targetArc:number) {
+        // let _baseData = this.generateBaseData(diameter);
+        let _baseData = this.mBaseData;
         let _count = sectionCount;
-        let _sectionArc = _baseData.angle2ArcUnit * 360 / _count;
+        let _sectionArc = this.mBaseData.angle2ArcUnit * 360 / _count;
+
+        let _container = this.view.groupLock;
+        _container.removeChildren();
 
         let _outerCircular = new egret.Shape();
         let _outerCircularGrap: egret.Graphics = _outerCircular.graphics;
-        _outerCircularGrap.beginFill(0xff0000);
+        // _outerCircularGrap.beginFill(0xff0000);
+        _outerCircularGrap.beginFill(0x513B06);
         _outerCircularGrap.drawCircle(_baseData.radius, _baseData.radius, _baseData.radius);
         _outerCircularGrap.endFill();
 
-        let _container = this.view.groupLock;
         _container.addChild(_outerCircular);
 
         let _innerCircular = new egret.Shape();
@@ -131,13 +141,15 @@ class ReactionRateMediator implements IMediator {
         _container.addChildAt(_sectionContainer, 1);
         for (let i = 0; i < _count; i++) {
             let _itemContainer: egret.DisplayObjectContainer = this.generateSectionContainer();
-            if (!this.mInitialParamOfSection) this.mInitialParamOfSection = {
+            // if (!this.mInitialParamOfSection) 
+            this.mInitialParamOfSection = {
                 sectionWidth: _baseData.sectionWidth,
                 radius: _baseData.radius,
                 angle2ArcUnit: _baseData.angle2ArcUnit,
                 //底板目标宽度
-                sectionTargetArc: _sectionArc/2,
-                sectionArc:_sectionArc
+                // sectionTargetArc: _sectionArc / 4,
+                sectionTargetArc: targetArc,
+                sectionArc: _sectionArc
             }
             let _section = this.generateSectionArc(this.mInitialParamOfSection);
             _itemContainer.addChild(_section);
@@ -163,8 +175,8 @@ class ReactionRateMediator implements IMediator {
 
         // this.onStart();
     }
-    private mInitialParamOfSection: { sectionWidth, radius, angle2ArcUnit, sectionArc,sectionTargetArc };
-    private generateSectionArc(param: { sectionWidth, radius, angle2ArcUnit, sectionArc,sectionTargetArc }, color: number = 0x513B06): egret.Shape {
+    private mInitialParamOfSection: { sectionWidth, radius, angle2ArcUnit, sectionArc, sectionTargetArc };
+    private generateSectionArc(param: { sectionWidth, radius, angle2ArcUnit, sectionArc, sectionTargetArc }, color: number = 0x513B06): egret.Shape {
         if (!param) return;
         let _part: egret.Shape = new egret.Shape();
         let _partGrap: egret.Graphics = _part.graphics;
@@ -193,16 +205,18 @@ class ReactionRateMediator implements IMediator {
     private initRotateTimer() {
         this.mRotateTimer.addEventListener(egret.TimerEvent.TIMER, this.onRotateTimer, this);
     }
+    private mStepCount:number = 2;
     private mPointerRotateAngle: number = 0;
     private onRotateTimer() {
         let _curPointerRotate: number = this.mPointer.container.rotation;
         _curPointerRotate = _curPointerRotate < 0 ? this.mPointer.container.rotation + 360 : _curPointerRotate;
         //旋转速度
-        this.mPointerRotateAngle = (_curPointerRotate + 10) % 360;
+        this.mPointerRotateAngle = (_curPointerRotate + this.mStepCount) % 360;
         this.mPointer.container.rotation = this.mPointerRotateAngle;
     }
     private onStart() {
         this.mRotateTimer.start();
+        // egret.Tween.get(this.mPointer.container).to({rotation:0}).to({rotation:360},200)
     }
     private onPause() {
         this.mRotateTimer.stop();
@@ -210,12 +224,16 @@ class ReactionRateMediator implements IMediator {
             //check is success
             if (this.mCurStep === 4) {
                 this.view.setLabelStatus(true);
+                this.mCurStage++;
             }
             let _item = this.mCenterNumberDataProvider.source[this.mCurStep];
             _item.color = 0x00ff00;
             this.mCenterNumberDataProvider.itemUpdated(_item);
             this.mCurStep++;
             this.setMarkArcObjPos();
+            if(this.mCurStep == 5){
+                this.nextStage();
+            }
         };
     }
 
@@ -224,18 +242,18 @@ class ReactionRateMediator implements IMediator {
         let _curNum: number = this.getCurTarIdx();
         let _constAngle: number = this.mSectionCenterAngleDic[_curNum];
         // let _isCorrect: boolean = (() => {
-            // egret.log("[ReactionRateMediator:checkIsInCorrectPos] this.mPointerRotateAngle->", this.mPointerRotateAngle)
-            //TODO:: storage critical value in dic to avoid frequently claculate
-            let _centerDistance;
-            let _absDistance;
-            if (_constAngle === 0 && this.mPointerRotateAngle) {
-                var _temp = 360 - this.mPointerRotateAngle;
-                this.mPointerRotateAngle = Math.min(_temp,this.mPointerRotateAngle);
-            }
-            _centerDistance = this.mPointerRotateAngle - _constAngle;
-            _absDistance = Math.abs(_centerDistance);
-            return _absDistance <= (this.mPointerArc - this.mInitialParamOfSection.sectionTargetArc)/2 * this.mBaseData.arc2angleUnit;
-            // return _absDistance <= this.mInitialParamOfSection.sectionArc/2 * this.mBaseData.arc2angleUnit;
+        // egret.log("[ReactionRateMediator:checkIsInCorrectPos] this.mPointerRotateAngle->", this.mPointerRotateAngle)
+        //TODO:: storage critical value in dic to avoid frequently claculate
+        let _centerDistance;
+        let _absDistance;
+        if (_constAngle === 0 && this.mPointerRotateAngle) {
+            var _temp = 360 - this.mPointerRotateAngle;
+            this.mPointerRotateAngle = Math.min(_temp, this.mPointerRotateAngle);
+        }
+        _centerDistance = this.mPointerRotateAngle - _constAngle;
+        _absDistance = Math.abs(_centerDistance);
+        return _absDistance <= (this.mPointerArc - this.mInitialParamOfSection.sectionTargetArc) / 2 * this.mBaseData.arc2angleUnit;
+        // return _absDistance <= this.mInitialParamOfSection.sectionArc/2 * this.mBaseData.arc2angleUnit;
         // })();
         // return _isCorrect;
     }
@@ -248,6 +266,7 @@ class ReactionRateMediator implements IMediator {
         }
     }
     private onAgain() {
+        this.generateLockPanel(this.mView.sectionCount,this.mInitTargetArc);
         this.recoverView();
     }
     private onSwitch() {
@@ -272,6 +291,17 @@ class ReactionRateMediator implements IMediator {
     }
     private getCurTarIdx(): number {
         return this.mCenterNumData[this.mCurStep];
+    }
+
+    private mCurStage:number = 0;
+    private nextStage() {
+        //FIXME:只能到10关
+        //减少目标底板面积
+        this.generateLockPanel(this.mView.sectionCount,this.mInitTargetArc*(1-this.mCurStage*0.1));
+        //增加指针移动速度
+        // this.mStepCount+=2;
+        
+        this.recoverView();
     }
     /**还原场景组件状态及数据 */
     private recoverView() {
